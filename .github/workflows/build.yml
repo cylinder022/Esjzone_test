@@ -55,24 +55,3 @@ jobs:
           ./gradlew assembleRelease
           ./gradlew bundleRelease
 
-      - name: Relocate outputs
-        run: |
-          mkdir outputs
-          mv app/build/outputs/apk/release/*.apk outputs/
-          mv app/build/outputs/bundle/release/*.aab outputs/
-          mv outputs/app-release-unsigned-signed.apk outputs/app-release.apk
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: esjzone
-          path: outputs/*
-
-      - name: Create release
-        if: ${{ env.RELEASE_VERSION != '' }}
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "outputs/*"
-          name: "Esjzone v${{ env.RELEASE_VERSION }}"
-          token: ${{ secrets.YOUR_GITHUB_TOKEN }}
-          prerelease: false
