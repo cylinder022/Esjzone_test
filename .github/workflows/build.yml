@@ -54,10 +54,21 @@ jobs:
         run: |
           ./gradlew assembleRelease
           ./gradlew bundleRelease
+      - name: List APK files
+        run: ls -l app/build/outputs/apk/release/
+
+      - name: Relocate outputs
+        run: |
+          mkdir -p outputs
+          # 移动所有 APK 文件到 outputs 目录
+          mv app/build/outputs/apk/release/*.apk outputs/ || true
+          # 移动 AAB 文件到 outputs 目录
+          mv app/build/outputs/bundle/release/*.aab outputs/ || true
+        if: always()  # 确保无论成功或失败都会运行
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
-        if: always()  
+        if: always()  # 确保无论成功或失败都会运行
         with:
           name: android-build-output
           path: outputs/*
-
