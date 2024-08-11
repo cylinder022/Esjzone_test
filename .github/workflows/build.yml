@@ -54,4 +54,10 @@ jobs:
         run: |
           ./gradlew assembleRelease
           ./gradlew bundleRelease
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: always()  
+        with:
+          name: android-build-output
+          path: outputs/*
 
